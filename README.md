@@ -52,3 +52,32 @@ To set the serial number to `ABCD012345678` :
 ritool set MfrID ABCD
 ritool set G984Serial 012345678
 ```
+
+## Firmwares
+All known images are generated from Lantiq OpenWRT 14.07 (7.5.3).  
+The firmware are u-boot images (legacy uImage) containing the Linux kernel, followed by a squashfs root filesystem.  
+Only the oldest ones have Lantiq omcid present (but not used), all use the ALU/Nokia omciMgr.
+
+The  [firmwares directory](firmwares) contains different images :
+IMAGEVERSION   | SOFTWAREVERSION | BUILDDATE     | LATEST_REV | omcid present
+-------------- | --------------- | ------------- | ---------- | -------------
+3FE46398AFGA95 | AFG.A95p02      | 20170328_1144 | 17850      | Y
+3FE46398BFGA06 | BFG.A06p02      | 20170407_1757 | 18511      | Y
+3FE46398AFGB89 | AFG.B89p04      | 20170630_0517 | 22216      | N
+3FE47111AFGB89 | AFG.B89         | 20170711_1243 | 22216      | N
+3FE47111BFHB32 | BFH.B32p01      | 20180207_1700 | 32678      | N
+
+### Upgrade
+To flash a different firmware, the first step is to determine the current running image (0 or 1) :
+```
+ONTUSER@SFP:~# upgradestatus
+***** get current running image *****
+current running image is  image0 !
+...
+```
+Then the **other** image must be flashed, the bootloader configured to boot it, and we can reboot :
+```
+mtd write image.bin image1
+update_env_flag 1
+reboot
+```
