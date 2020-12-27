@@ -53,6 +53,18 @@ ritool set MfrID ABCD
 ritool set G984Serial 012345678
 ```
 
+### PLOAM password (SLID)
+To check the current password (the `password` field contains decimal values of ASCII characters) :
+```
+onu gtccg
+```
+To set the current password to `0123456789` (using hex values of ASCII characters) :
+```
+uci set gpon.ploam.nPassword='0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39'
+uci commit
+reboot
+```
+
 ## Firmwares
 All known images are generated from Lantiq OpenWRT 14.07 (7.5.3).  
 The firmware are u-boot images (legacy uImage) containing the Linux kernel, followed by a squashfs root filesystem.  
