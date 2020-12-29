@@ -1,0 +1,46 @@
+--- a/etc/init.d/dropbear	2017-07-11 07:03:05.000000000 +0200
++++ b/etc/init.d/dropbear	2020-12-29 02:09:43.719665917 +0100
+@@ -65,7 +65,7 @@
+ 	local pid_file="/var/run/${NAME}.${PIDCOUNT}.pid"
+ 
+ 	procd_open_instance
+-	procd_set_param command "$PROG" -F -P "$pid_file"
++	procd_set_param command "$PROG" -F -P "$pid_file" -R
+ 	[ "${PasswordAuth}" -eq 0 ] && procd_append_param command -s
+ 	[ "${GatewayPorts}" -eq 1 ] && procd_append_param command -a
+ 	[ "${RootPasswordAuth}" -eq 0 ] && procd_append_param command -g
+@@ -80,34 +80,8 @@
+ 	procd_close_instance
+ }
+ 
+-keygen()
+-{
+-	for keytype in rsa dss; do
+-		# check for keys
+-		key=dropbear/dropbear_${keytype}_host_key
+-		[ -f /tmp/$key -o -s /etc/$key ] || {
+-			# generate missing keys
+-			mkdir -p /tmp/dropbear
+-			[ -x /usr/bin/dropbearkey ] && {
+-				/usr/bin/dropbearkey -t $keytype -f /tmp/$key 2>&- >&- && exec /etc/rc.common "$initscript" start
+-			} &
+-		exit 0
+-		}
+-	done
+-
+-	lock /tmp/.switch2jffs
+-	mkdir -p /etc/dropbear
+-	mv /tmp/dropbear/dropbear_* /etc/dropbear/
+-	lock -u /tmp/.switch2jffs
+-	#chown root /etc/dropbear
+-	#chmod 0700 /etc/dropbear
+-}
+-
+ start_service()
+ {
+-	[ -s /etc/dropbear/dropbear_rsa_host_key -a \
+-	  -s /etc/dropbear/dropbear_dss_host_key ] || keygen
+-
+ 	. /lib/functions.sh
+ 	. /lib/functions/network.sh
+ 
