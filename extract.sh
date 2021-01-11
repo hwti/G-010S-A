@@ -15,18 +15,18 @@ do
     IMAGE="$1"
     echo "Extracting $IMAGE ..."
 
-    KERNEL_SIZE=$(($(od --skip-bytes=12 --read-bytes=4 --endian=big -t u4 -A n "$IMAGE")))
+    KERNEL_SIZE=$((0x$(od -j12 -N4 -tx1 -An "$IMAGE" | tr -d ' ')))
 
     DIR="${IMAGE%.*}"
     mkdir -p "$DIR"
 
-    dd if="$IMAGE" of="$DIR/uImage" iflag='count_bytes' count=$((64 + KERNEL_SIZE)) status=none
+    head -c $((64 + KERNEL_SIZE)) "$IMAGE" > "$DIR/uImage"
     echo "Extracted $DIR/uImage"
 
-    dd if="$IMAGE" of="$DIR/kernel.lzma" iflag='skip_bytes,count_bytes' skip=64 count=$KERNEL_SIZE status=none
+    tail -c +65 "$DIR/uImage" > "$DIR/kernel.lzma"
     echo "Extracted $DIR/kernel.lzma"
 
-    dd if="$IMAGE" of="$DIR/rootfs.squashfs" iflag='skip_bytes,count_bytes' skip=$((64 + KERNEL_SIZE)) status=none
+    tail -c +$((65 + KERNEL_SIZE)) "$IMAGE" > "$DIR/rootfs.squashfs"
     echo "Extracted $DIR/rootfs.squashfs"
 
     rm -rf "$DIR/squashfs-root"

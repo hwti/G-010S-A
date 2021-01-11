@@ -20,7 +20,7 @@ fi
 
 DIR="${IMAGE%.*}"
 ROOTFS="$DIR/squashfs-root"
-ROOTFS_ABS=$(realpath "$ROOTFS")
+ROOTFS_ABS="$PWD/$ROOTFS"
 
 printf "\nPatching rootfs ...\n"
 for PATCH_DIR in patches/*
@@ -33,8 +33,7 @@ printf "\nCreating new squashfs image\n"
 mksquashfs "$ROOTFS" patched.squashfs -noappend -comp xz -b 262144
 
 OUT="${IMAGE%.*}_patched.bin"
-cat "$DIR/uImage" patched.squashfs > "$OUT"
-truncate -s 6M "$OUT"
+cat "$DIR/uImage" patched.squashfs | dd of="$OUT" bs=6291456 count=1 conv=sync 2>/dev/null
 printf "\n%s created successfully\n" "$OUT"
 
 rm patched.squashfs
