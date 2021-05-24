@@ -58,12 +58,7 @@ To check the current password (the `password` field contains decimal values of A
 ```
 onu gtccg
 ```
-To set the current password to `0123456789` (using hex values of ASCII characters) :
-```
-uci set gpon.ploam.nPassword='0x30 0x31 0x32 0x33 0x34 0x35 0x36 0x37 0x38 0x39'
-uci commit
-reboot
-```
+The value can be changed using the web interface.
 
 ## Firmwares
 All known images are generated from Lantiq OpenWRT 14.07 (7.5.3).  
