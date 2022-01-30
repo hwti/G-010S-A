@@ -73,6 +73,7 @@ IMAGEVERSION   | SOFTWAREVERSION | BUILDDATE     | LATEST_REV | omcid present
 3FE46398AFGB89 | AFG.B89p04      | 20170630_0517 | 22216      | N
 3FE47111AFGB89 | AFG.B89         | 20170711_1243 | 22216      | N
 3FE47111BFHB32 | BFH.B32p01      | 20180207_1700 | 32678      | N
+3FE46398BGCB22 | BGC.B22         | 20210125_1451 |            | N
 
 ### Upgrade
 To flash a different firmware, the first step is to determine the current running image (0 or 1) :
