@@ -12,6 +12,12 @@ The default IP address is 192.168.1.10, there are two interfaces :
  - SSH : user ONTUSER, password SUGAR2A041
  - HTTP : user adminadmin, password ALC#FGU
 
+Modern SSH configs might not be able to negotiate a connection with the legacy ciphers by default. If that is the case, run the following usage:
+
+```bash
+$ ssh -o KexAlgorithms=+diffie-hellman-group1-sha1 -o HostKeyAlgorithms=+ssh-rsa ONTUSER@192.168.1.10
+```
+
 The commands shown below are all meant to be used on the SSH command-line.
 
 ## 2.5Gbps
